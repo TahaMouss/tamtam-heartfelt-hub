@@ -1,116 +1,217 @@
-import { useRef } from "react";
-import { BarChart3, Brain, Building2 } from "lucide-react";
+import { useState } from "react";
+import { BarChart3, Brain, Building2, TrendingUp, Calendar, Heart, AlertCircle, Users, Activity } from "lucide-react";
 
 const dashboards = [
   {
+    id: "parent",
     icon: BarChart3,
     title: "Parent Dashboard",
-    description: "Track your child's emotional trends, event participation, and wish activity.",
+    description: "Stay connected with your child's emotional journey. Track moods, events, and wishes — all in real time.",
     color: "bg-soft-blue-light text-soft-blue",
+    activeColor: "bg-primary text-primary-foreground",
     badge: null,
-    mockItems: ["Mood: Happy 😊", "Events: 3 joined", "Wishes: 1 fulfilled"],
+    screens: [
+      {
+        label: "Mood Tracker",
+        icon: Heart,
+        content: [
+          { label: "Today's Mood", value: "Happy 😊", trend: "up" },
+          { label: "Weekly Average", value: "8.2/10", trend: "up" },
+          { label: "Mood Streak", value: "5 days positive", trend: "up" },
+        ],
+      },
+      {
+        label: "Activity",
+        icon: Calendar,
+        content: [
+          { label: "Events Joined", value: "3 this week", trend: "up" },
+          { label: "Games Played", value: "12 sessions", trend: "up" },
+          { label: "Stories Listened", value: "4 stories", trend: "up" },
+        ],
+      },
+      {
+        label: "Wishes",
+        icon: Heart,
+        content: [
+          { label: "Active Wishes", value: "2 posted", trend: "neutral" },
+          { label: "Fulfilled", value: "1 this month", trend: "up" },
+          { label: "Community Rank", value: "Top 15%", trend: "up" },
+        ],
+      },
+    ],
   },
   {
+    id: "psychologist",
     icon: Brain,
     title: "Psychologist Dashboard",
-    description: "Access AI-generated emotional reports, manage private sessions, and monitor assigned kids.",
+    description: "AI-assisted emotional reports, session management, and real-time alerts for the children in your care.",
     color: "bg-soft-green-light text-soft-green",
+    activeColor: "bg-accent text-accent-foreground",
     badge: null,
-    mockItems: ["Reports: 5 new", "Sessions: 2 today", "Alerts: 0"],
+    screens: [
+      {
+        label: "Reports",
+        icon: Activity,
+        content: [
+          { label: "New AI Reports", value: "5 pending", trend: "neutral" },
+          { label: "Flagged Keywords", value: "2 alerts", trend: "alert" },
+          { label: "Sentiment Score", value: "7.4/10 avg", trend: "up" },
+        ],
+      },
+      {
+        label: "Sessions",
+        icon: Users,
+        content: [
+          { label: "Today's Sessions", value: "2 scheduled", trend: "neutral" },
+          { label: "Completed", value: "8 this week", trend: "up" },
+          { label: "Next Session", value: "2:30 PM", trend: "neutral" },
+        ],
+      },
+      {
+        label: "Alerts",
+        icon: AlertCircle,
+        content: [
+          { label: "Critical Alerts", value: "0 active", trend: "up" },
+          { label: "Monitoring", value: "12 children", trend: "neutral" },
+          { label: "Response Time", value: "< 15 min avg", trend: "up" },
+        ],
+      },
+    ],
   },
   {
+    id: "ngo",
     icon: Building2,
     title: "NGO / Hospital Dashboard",
-    description: "Partner with TamTam to support children in your care.",
+    description: "Partner with TamTam to support children in your care. Measure impact and coordinate programs.",
     color: "bg-warm-yellow-light text-warm-yellow",
+    activeColor: "bg-secondary text-secondary-foreground",
     badge: "Coming Soon",
-    mockItems: ["Children: --", "Programs: --", "Impact: --"],
+    screens: [
+      {
+        label: "Overview",
+        icon: TrendingUp,
+        content: [
+          { label: "Children Enrolled", value: "-- pending", trend: "neutral" },
+          { label: "Active Programs", value: "-- pending", trend: "neutral" },
+          { label: "Impact Score", value: "-- pending", trend: "neutral" },
+        ],
+      },
+    ],
   },
 ];
 
 const DashboardsSection = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeDashboard, setActiveDashboard] = useState(0);
+  const [activeScreen, setActiveScreen] = useState(0);
+  const current = dashboards[activeDashboard];
+
+  const handleDashboardChange = (i: number) => {
+    setActiveDashboard(i);
+    setActiveScreen(0);
+  };
 
   return (
     <section id="dashboards" className="py-16 md:py-20 lg:py-28 bg-soft-blue-light/20">
       <div className="container mx-auto px-5">
         <div className="text-center mb-10 md:mb-14 scroll-animate">
           <h2 className="text-[28px] md:text-4xl font-extrabold text-foreground mb-3 md:mb-4">
-            Dashboards for Everyone
+            Dashboards for Everyone 📊
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-base md:text-lg">
             Real-time insights and tools for parents, professionals, and organizations.
           </p>
         </div>
 
-        {/* Mobile: swipeable phone mockups */}
-        <div
-          ref={scrollRef}
-          className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-4 -mx-5 px-5"
-        >
-          {dashboards.map((d) => (
-            <div
-              key={d.title}
-              className="snap-center shrink-0 w-[80vw] max-w-[300px] flex flex-col items-center"
-            >
-              {/* Phone frame mockup */}
-              <div className="relative w-[220px] h-[380px] bg-card rounded-[2rem] border-4 border-foreground/10 shadow-xl overflow-hidden">
-                {/* Status bar */}
-                <div className="h-8 bg-muted/50 flex items-center justify-center">
-                  <div className="w-16 h-1.5 rounded-full bg-border" />
-                </div>
-                {/* Content */}
-                <div className="p-4 flex flex-col items-center text-center gap-3">
-                  {d.badge && (
-                    <span className="bg-warm-yellow text-secondary-foreground text-xs font-bold px-3 py-1 rounded-full">
-                      {d.badge}
-                    </span>
-                  )}
-                  <div className={`w-12 h-12 rounded-xl ${d.color} flex items-center justify-center`}>
-                    <d.icon size={24} />
-                  </div>
-                  <h3 className="font-bold text-base text-foreground">{d.title}</h3>
-                  <div className="w-full space-y-2 mt-2">
-                    {d.mockItems.map((item) => (
-                      <div key={item} className="bg-muted/40 rounded-lg py-2.5 px-3 text-sm text-foreground/70 text-left">
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <p className="text-muted-foreground text-sm leading-relaxed mt-4 text-center px-2">{d.description}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Scroll indicator dots (mobile) */}
-        <div className="md:hidden flex justify-center gap-1.5 mt-3">
-          {dashboards.map((_, i) => (
-            <div key={i} className="w-1.5 h-1.5 rounded-full bg-border" />
-          ))}
-        </div>
-
-        {/* Desktop: grid cards */}
-        <div className="hidden md:grid grid-cols-3 gap-6 max-w-4xl mx-auto">
+        {/* Dashboard selector tabs */}
+        <div className="flex justify-center gap-2 mb-8 scroll-animate">
           {dashboards.map((d, i) => (
-            <div
-              key={d.title}
-              className="scroll-animate bg-card rounded-2xl p-6 shadow-sm border border-border/50 text-center space-y-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 relative"
-              style={{ transitionDelay: `${i * 80}ms` }}
+            <button
+              key={d.id}
+              onClick={() => handleDashboardChange(i)}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold transition-all min-h-[48px] ${
+                activeDashboard === i
+                  ? "bg-primary text-primary-foreground shadow-lg scale-105"
+                  : "bg-card text-muted-foreground border border-border/50 hover:border-primary/30"
+              }`}
             >
-              {d.badge && (
-                <span className="absolute top-4 right-4 bg-warm-yellow text-secondary-foreground text-xs font-bold px-3 py-1 rounded-full">
-                  {d.badge}
-                </span>
-              )}
-              <div className={`w-14 h-14 rounded-xl ${d.color} flex items-center justify-center mx-auto`}>
-                <d.icon size={28} />
-              </div>
-              <h3 className="font-bold text-lg text-foreground">{d.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{d.description}</p>
-            </div>
+              <d.icon size={18} />
+              <span className="hidden sm:inline">{d.title.split(" ")[0]}</span>
+            </button>
           ))}
+        </div>
+
+        {/* Interactive dashboard card */}
+        <div className="max-w-md mx-auto scroll-animate">
+          {/* Phone mockup */}
+          <div className="relative mx-auto w-full max-w-[320px]">
+            <div className="bg-card rounded-[2.5rem] border-4 border-foreground/10 shadow-2xl overflow-hidden">
+              {/* Status bar */}
+              <div className="h-10 bg-muted/40 flex items-center justify-center">
+                <div className="w-20 h-1.5 rounded-full bg-border" />
+              </div>
+
+              {/* Dashboard header */}
+              <div className={`px-5 py-4 ${current.color} bg-opacity-20`}>
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl ${current.color} flex items-center justify-center`}>
+                    <current.icon size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm text-foreground">{current.title}</h3>
+                    {current.badge && (
+                      <span className="text-xs font-semibold text-warm-yellow">{current.badge}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Screen tabs */}
+              {current.screens.length > 1 && (
+                <div className="flex gap-1 px-4 pt-3">
+                  {current.screens.map((s, i) => (
+                    <button
+                      key={s.label}
+                      onClick={() => setActiveScreen(i)}
+                      className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all min-h-[40px] ${
+                        activeScreen === i
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-muted/50"
+                      }`}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Screen content */}
+              <div className="p-4 space-y-3 min-h-[200px]">
+                {current.screens[Math.min(activeScreen, current.screens.length - 1)]?.content.map((item) => (
+                  <div
+                    key={item.label}
+                    className="bg-muted/30 rounded-xl p-4 flex items-center justify-between animate-fade-in"
+                  >
+                    <div>
+                      <p className="text-xs text-muted-foreground font-medium">{item.label}</p>
+                      <p className="text-sm font-bold text-foreground mt-0.5">{item.value}</p>
+                    </div>
+                    {item.trend === "up" && <TrendingUp size={18} className="text-accent" />}
+                    {item.trend === "alert" && <AlertCircle size={18} className="text-soft-pink" />}
+                  </div>
+                ))}
+              </div>
+
+              {/* Bottom bar */}
+              <div className="h-8 bg-muted/20 flex items-center justify-center">
+                <div className="w-28 h-1 rounded-full bg-border" />
+              </div>
+            </div>
+          </div>
+
+          {/* Description below */}
+          <p className="text-center text-muted-foreground text-sm leading-relaxed mt-6 max-w-sm mx-auto">
+            {current.description}
+          </p>
         </div>
       </div>
     </section>
