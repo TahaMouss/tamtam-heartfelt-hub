@@ -5,7 +5,7 @@ import tamtamLogo from "@/assets/tamtam-logo.jpeg";
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Wishes", href: "#wishes" },
-  { label: "How It Works", href: "#how-it-works" },
+  
   { label: "Dashboards", href: "#dashboards" },
   { label: "About", href: "#about" },
   { label: "Contact", href: "#contact" },
