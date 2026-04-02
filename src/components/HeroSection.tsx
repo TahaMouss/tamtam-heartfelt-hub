@@ -30,7 +30,7 @@ const HeroSection = () => {
         {/* Illustration first on mobile */}
         <div className="flex-1 flex justify-center order-first lg:order-last w-full">
           <img
-            src={heroIllustration}
+            src={tamtamFriends}
             alt="Child with TamTam companion under starry sky"
             width={500}
             height={500}
