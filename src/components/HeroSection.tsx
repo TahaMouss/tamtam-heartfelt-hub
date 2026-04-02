@@ -32,16 +32,16 @@ const HeroSection = () => {
           <img
             src={tamtamFriends}
             alt="Child with TamTam companion under starry sky"
-            width={500}
-            height={500}
-            className="w-full max-w-[500px] md:max-w-2xl lg:max-w-3xl drop-shadow-2xl animate-bob"
-            style={{ maxHeight: "60vh" }}
+            width={640}
+            height={640}
+            className="w-[420px] max-w-none md:w-[680px] lg:w-[900px] drop-shadow-2xl animate-bob"
+            style={{ maxHeight: "74vh" }}
             loading="eager"
           />
         </div>
 
         <div className="flex-1 text-center lg:text-left space-y-5 md:space-y-6">
-          <h1 className="text-[40px] md:text-6xl lg:text-7xl font-extrabold leading-tight text-foreground">
+          <h1 className="text-[52px] md:text-7xl lg:text-[5.5rem] font-extrabold leading-[0.9] text-foreground">
             A safe space where{" "}
             <span className="text-primary">little fighters</span> feel heard,
             supported, and{" "}
