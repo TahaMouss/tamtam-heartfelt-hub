@@ -1,4 +1,4 @@
-import aboutIllustration from "@/assets/about-illustration.png";
+import tamtamPeeking from "@/assets/tamtam-peeking.png";
 
 const AboutSection = () => {
   return (
