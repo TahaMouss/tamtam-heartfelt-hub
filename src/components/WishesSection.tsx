@@ -222,7 +222,7 @@ const WishesSection = () => {
                   <div className={`bg-gradient-to-br ${selectedWish.color} rounded-2xl p-4 mb-6 border`}>
                     <div className="flex items-center gap-3 mb-2">
                       <span className="text-2xl">{selectedWish.emoji}</span>
-                      <span className="font-bold text-foreground">{selectedWish.name}, {selectedWish.age}</span>
+                      <span className="font-bold text-foreground">A Child's Wish</span>
                     </div>
                     <p className="text-foreground/80 text-sm italic">"{selectedWish.wish}"</p>
                   </div>
