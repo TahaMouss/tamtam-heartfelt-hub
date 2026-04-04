@@ -230,7 +230,7 @@ const WishesSection = () => {
                     Help make this wish come true
                   </h3>
                   <p className="text-muted-foreground text-sm mb-5">
-                    Fill in your details and we'll connect you with {selectedWish.name}'s care team.
+                    Fill in your details and we'll connect you with the child's care team.
                   </p>
                   <form onSubmit={handleSubmit} className="space-y-3.5">
                     <input required placeholder="Full Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-3.5 rounded-xl border border-border bg-muted/30 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-base min-h-[52px]" />
