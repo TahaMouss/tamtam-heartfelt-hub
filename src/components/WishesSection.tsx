@@ -1,20 +1,71 @@
 import { useState, useEffect, useRef } from "react";
 import { Heart, X, Sparkles, Gift } from "lucide-react";
 
-const wishes = [
-  { name: "Lara", age: 8, wish: "I wish I had a stuffed bunny to hug when I'm scared at the hospital.", emoji: "🐰", color: "from-pink-100 to-rose-50 border-pink-200" },
-  { name: "Karim", age: 10, wish: "I wish I could have art supplies so I can draw during my treatments.", emoji: "🎨", color: "from-blue-100 to-sky-50 border-blue-200" },
-  { name: "Maya", age: 7, wish: "I wish I could go to the zoo one day with my family.", emoji: "🦁", color: "from-green-100 to-emerald-50 border-green-200" },
-  { name: "Omar", age: 11, wish: "I wish I had a tablet so I can study and not fall behind in school.", emoji: "📚", color: "from-purple-100 to-violet-50 border-purple-200" },
-  { name: "Nour", age: 9, wish: "I wish I could have a birthday cake — I've never had one with candles.", emoji: "🎂", color: "from-amber-100 to-yellow-50 border-amber-200" },
+const CARD_STYLES = [
+  { emoji: "🌟", color: "from-pink-100 to-rose-50 border-pink-200" },
+  { emoji: "🎨", color: "from-blue-100 to-sky-50 border-blue-200" },
+  { emoji: "🦁", color: "from-green-100 to-emerald-50 border-green-200" },
+  { emoji: "📚", color: "from-purple-100 to-violet-50 border-purple-200" },
+  { emoji: "🎂", color: "from-amber-100 to-yellow-50 border-amber-200" },
+  { emoji: "🐰", color: "from-rose-100 to-pink-50 border-rose-200" },
 ];
 
+const fallbackWishes = [
+  { id: "1", wish_text: "I wish I had a stuffed bunny to hug when I'm scared at the hospital.", created_at: "" },
+  { id: "2", wish_text: "I wish I could have art supplies so I can draw during my treatments.", created_at: "" },
+  { id: "3", wish_text: "I wish I could go to the zoo one day with my family.", created_at: "" },
+  { id: "4", wish_text: "I wish I had a tablet so I can study and not fall behind in school.", created_at: "" },
+  { id: "5", wish_text: "I wish I could have a birthday cake — I've never had one with candles.", created_at: "" },
+];
+
+interface ApiWish {
+  id: string;
+  wish_text: string;
+  created_at: string;
+}
+
+interface DisplayWish {
+  id: string;
+  wish: string;
+  emoji: string;
+  color: string;
+}
+
+const API_URL = "http://Tamtam-backend-env.eba-mmqhvdqg.us-west-2.elasticbeanstalk.com/api/wishes/approved";
+
 const WishesSection = () => {
-  const [selectedWish, setSelectedWish] = useState<typeof wishes[0] | null>(null);
+  const [wishes, setWishes] = useState<DisplayWish[]>([]);
+  const [selectedWish, setSelectedWish] = useState<DisplayWish | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const sheetRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef({ startY: 0, currentY: 0, isDragging: false });
+
+  useEffect(() => {
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data: ApiWish[]) => {
+        const source = data.length > 0 ? data : fallbackWishes;
+        setWishes(
+          source.map((w, i) => ({
+            id: w.id,
+            wish: w.wish_text,
+            emoji: CARD_STYLES[i % CARD_STYLES.length].emoji,
+            color: CARD_STYLES[i % CARD_STYLES.length].color,
+          }))
+        );
+      })
+      .catch(() => {
+        setWishes(
+          fallbackWishes.map((w, i) => ({
+            id: w.id,
+            wish: w.wish_text,
+            emoji: CARD_STYLES[i % CARD_STYLES.length].emoji,
+            color: CARD_STYLES[i % CARD_STYLES.length].color,
+          }))
+        );
+      });
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = selectedWish ? "hidden" : "";
@@ -94,7 +145,7 @@ const WishesSection = () => {
           </div>
           <div className="w-px bg-border" />
           <div className="text-center">
-            <div className="text-3xl md:text-4xl font-extrabold text-soft-green">5</div>
+            <div className="text-3xl md:text-4xl font-extrabold text-soft-green">{wishes.length}</div>
             <div className="text-xs md:text-sm text-muted-foreground font-medium">Wishes Waiting</div>
           </div>
         </div>
@@ -102,7 +153,7 @@ const WishesSection = () => {
         <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto">
           {wishes.map((w, i) => (
             <div
-              key={w.name}
+              key={w.id}
               className={`scroll-animate group bg-gradient-to-br ${w.color} border rounded-3xl p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl relative overflow-hidden`}
               style={{ transitionDelay: `${i * 80}ms` }}
             >
@@ -115,7 +166,7 @@ const WishesSection = () => {
                     {w.emoji}
                   </div>
                   <div>
-                    <p className="font-bold text-foreground text-lg leading-tight">{w.name}, {w.age}</p>
+                    <p className="font-bold text-foreground text-lg leading-tight">A Child's Wish</p>
                     <p className="text-xs text-foreground/50 font-medium">Little fighter</p>
                   </div>
                 </div>
@@ -163,7 +214,7 @@ const WishesSection = () => {
                   <div className="text-6xl animate-bounce">💛</div>
                   <h3 className="text-2xl font-bold text-foreground">Thank you so much!</h3>
                   <p className="text-muted-foreground text-base max-w-xs mx-auto">
-                    You're making {selectedWish.name}'s dream closer to reality. Our team will reach out to you soon.
+                    You're making a child's dream closer to reality. Our team will reach out to you soon.
                   </p>
                 </div>
               ) : (
@@ -171,7 +222,7 @@ const WishesSection = () => {
                   <div className={`bg-gradient-to-br ${selectedWish.color} rounded-2xl p-4 mb-6 border`}>
                     <div className="flex items-center gap-3 mb-2">
                       <span className="text-2xl">{selectedWish.emoji}</span>
-                      <span className="font-bold text-foreground">{selectedWish.name}, {selectedWish.age}</span>
+                      <span className="font-bold text-foreground">A Child's Wish</span>
                     </div>
                     <p className="text-foreground/80 text-sm italic">"{selectedWish.wish}"</p>
                   </div>
@@ -179,7 +230,7 @@ const WishesSection = () => {
                     Help make this wish come true
                   </h3>
                   <p className="text-muted-foreground text-sm mb-5">
-                    Fill in your details and we'll connect you with {selectedWish.name}'s care team.
+                    Fill in your details and we'll connect you with the child's care team.
                   </p>
                   <form onSubmit={handleSubmit} className="space-y-3.5">
                     <input required placeholder="Full Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-4 py-3.5 rounded-xl border border-border bg-muted/30 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-base min-h-[52px]" />
