@@ -153,7 +153,7 @@ const WishesSection = () => {
         <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto">
           {wishes.map((w, i) => (
             <div
-              key={w.name}
+              key={w.id}
               className={`scroll-animate group bg-gradient-to-br ${w.color} border rounded-3xl p-6 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl relative overflow-hidden`}
               style={{ transitionDelay: `${i * 80}ms` }}
             >
