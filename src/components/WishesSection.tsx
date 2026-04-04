@@ -166,7 +166,7 @@ const WishesSection = () => {
                     {w.emoji}
                   </div>
                   <div>
-                    <p className="font-bold text-foreground text-lg leading-tight">{w.name}, {w.age}</p>
+                    <p className="font-bold text-foreground text-lg leading-tight">A Child's Wish</p>
                     <p className="text-xs text-foreground/50 font-medium">Little fighter</p>
                   </div>
                 </div>
