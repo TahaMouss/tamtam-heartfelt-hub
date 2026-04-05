@@ -31,7 +31,7 @@ interface DisplayWish {
   color: string;
 }
 
-const API_URL = "http://Tamtam-backend-env.eba-mmqhvdqg.us-west-2.elasticbeanstalk.com/api/wishes/approved";
+const API_URL = "https://tamtamapi.xyz/api/wishes/approved";
 
 const WishesSection = () => {
   const [wishes, setWishes] = useState<DisplayWish[]>([]);
