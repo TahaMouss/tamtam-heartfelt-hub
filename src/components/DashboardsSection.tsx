@@ -159,7 +159,7 @@ const PhoneMockup = ({
 
   return (
     <div style={{ transform: `scale(${scale})`, transformOrigin: "center center" }} className="transition-transform duration-500">
-      <div className="bg-card rounded-[2rem] border-[3px] border-foreground/10 shadow-2xl overflow-hidden w-[260px]">
+      <div className="bg-card border-[3px] border-foreground/10 shadow-2xl w-[260px]" style={{ borderRadius: '44px', overflow: 'hidden' }}>
         {/* Status bar */}
         <div className="h-7 bg-muted/40 flex items-center justify-between px-4">
           <span className="text-[8px] font-semibold text-muted-foreground">9:41</span>
