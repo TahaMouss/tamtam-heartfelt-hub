@@ -1,20 +1,71 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Send, Shield, Heart, Users } from "lucide-react";
+import { ArrowLeft, Send, Shield, Heart, Users, Plus, Trash2 } from "lucide-react";
 import tamtamLogo from "@/assets/tamtam-logo.jpeg";
+
+interface Child {
+  name: string;
+  age: string;
+}
 
 const RequestAccess = () => {
   const navigate = useNavigate();
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", role: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    countryCode: "+1",
+    location: "",
+    role: "",
+    message: "",
+  });
+  const [children, setChildren] = useState<Child[]>([{ name: "", age: "" }]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
   };
 
+  const addChild = () => {
+    setChildren([...children, { name: "", age: "" }]);
+  };
+
+  const removeChild = (index: number) => {
+    if (children.length > 1) {
+      setChildren(children.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateChild = (index: number, field: keyof Child, value: string) => {
+    const updated = [...children];
+    updated[index] = { ...updated[index], [field]: value };
+    setChildren(updated);
+  };
+
   const inputClass =
     "w-full px-4 py-3.5 rounded-xl border border-border bg-muted/30 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 text-base min-h-[52px]";
+
+  const countryCodes = [
+    { code: "+1", label: "🇺🇸 +1" },
+    { code: "+44", label: "🇬🇧 +44" },
+    { code: "+33", label: "🇫🇷 +33" },
+    { code: "+49", label: "🇩🇪 +49" },
+    { code: "+971", label: "🇦🇪 +971" },
+    { code: "+966", label: "🇸🇦 +966" },
+    { code: "+91", label: "🇮🇳 +91" },
+    { code: "+86", label: "🇨🇳 +86" },
+    { code: "+81", label: "🇯🇵 +81" },
+    { code: "+61", label: "🇦🇺 +61" },
+    { code: "+55", label: "🇧🇷 +55" },
+    { code: "+234", label: "🇳🇬 +234" },
+    { code: "+254", label: "🇰🇪 +254" },
+    { code: "+27", label: "🇿🇦 +27" },
+    { code: "+20", label: "🇪🇬 +20" },
+    { code: "+212", label: "🇲🇦 +212" },
+    { code: "+962", label: "🇯🇴 +962" },
+    { code: "+961", label: "🇱🇧 +961" },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -86,6 +137,7 @@ const RequestAccess = () => {
                 className={inputClass}
               />
             </div>
+
             <div>
               <label className="block text-sm font-semibold text-foreground mb-1.5">Email *</label>
               <input
@@ -97,6 +149,41 @@ const RequestAccess = () => {
                 className={inputClass}
               />
             </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-foreground mb-1.5">Phone Number *</label>
+              <div className="flex gap-2">
+                <select
+                  value={form.countryCode}
+                  onChange={(e) => setForm({ ...form, countryCode: e.target.value })}
+                  className={`${inputClass} !w-[120px] flex-shrink-0`}
+                >
+                  {countryCodes.map((c) => (
+                    <option key={c.code} value={c.code}>{c.label}</option>
+                  ))}
+                </select>
+                <input
+                  required
+                  type="tel"
+                  placeholder="Phone number"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  className={inputClass}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-foreground mb-1.5">Location *</label>
+              <input
+                required
+                placeholder="City, Country"
+                value={form.location}
+                onChange={(e) => setForm({ ...form, location: e.target.value })}
+                className={inputClass}
+              />
+            </div>
+
             <div>
               <label className="block text-sm font-semibold text-foreground mb-1.5">I am a... *</label>
               <select
@@ -114,6 +201,55 @@ const RequestAccess = () => {
                 <option value="other">Other</option>
               </select>
             </div>
+
+            {/* Children section */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="block text-sm font-semibold text-foreground">Children *</label>
+                <button
+                  type="button"
+                  onClick={addChild}
+                  className="flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                >
+                  <Plus size={16} /> Add Child
+                </button>
+              </div>
+              {children.map((child, index) => (
+                <div key={index} className="flex gap-2 items-start">
+                  <div className="flex-1">
+                    <input
+                      required
+                      placeholder={`Child ${index + 1} name`}
+                      value={child.name}
+                      onChange={(e) => updateChild(index, "name", e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+                  <div className="w-[90px] flex-shrink-0">
+                    <input
+                      required
+                      type="number"
+                      min="0"
+                      max="18"
+                      placeholder="Age"
+                      value={child.age}
+                      onChange={(e) => updateChild(index, "age", e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+                  {children.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeChild(index)}
+                      className="min-w-[48px] min-h-[52px] flex items-center justify-center rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+
             <div>
               <label className="block text-sm font-semibold text-foreground mb-1.5">Why do you want to join? (optional)</label>
               <textarea
@@ -124,6 +260,7 @@ const RequestAccess = () => {
                 className={`${inputClass} resize-none min-h-[100px]`}
               />
             </div>
+
             <button
               type="submit"
               className="w-full bg-primary text-primary-foreground py-4 rounded-full font-bold text-base active:opacity-80 transition-opacity flex items-center justify-center gap-2 min-h-[52px]"
